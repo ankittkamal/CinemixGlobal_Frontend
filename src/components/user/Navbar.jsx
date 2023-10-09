@@ -1,14 +1,31 @@
 import React from "react";
 import { BsFillSunFill } from "react-icons/bs";
+import Container from "../Container";
+import { Link } from "react-router-dom";
+import { useAuth, useTheme } from "../../hooks";
+
 function Navbar() {
+  const { toggleTheme } = useTheme();
+  const { authInfo, handleLogout } = useAuth();
+  const { isLoggedIn } = authInfo;
   return (
-    <div className="bg-secondary">
-      <div className=" text-white max-w-screen-xl mx-auto p-2">
+    <div className="bg-secondary shadow-sm shadow-gray-500">
+      <Container className="p-2">
         <div className="flex justify-between items-center">
-          <img src="./logo.png" alt="" className="h-10"></img>
+          <Link to="./">
+            <img
+              src="./logo.png"
+              alt="movie-review-app-logo"
+              className="h-10"
+            ></img>
+          </Link>
+
           <ul className="flex items-center space-x-4">
             <li>
-              <button className="rounded  bg-dark-subtle p-1">
+              <button
+                onClick={toggleTheme}
+                className="rounded  bg-dark-subtle dark:bg-white p-1"
+              >
                 <BsFillSunFill className="text-secondary" size={24} />
               </button>
             </li>
@@ -19,10 +36,26 @@ function Navbar() {
                 placeholder="search..."
               ></input>
             </li>
-            <li className="text-white font-semibold text-lg">Login</li>
+            <li>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="text-white font-semibold text-lg"
+                >
+                  Log out
+                </button>
+              ) : (
+                <Link
+                  className="text-white font-semibold text-lg"
+                  to="/auth/signin"
+                >
+                  Login
+                </Link>
+              )}
+            </li>
           </ul>
         </div>
-      </div>
+      </Container>
     </div>
   );
 }
