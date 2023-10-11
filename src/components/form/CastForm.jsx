@@ -2,6 +2,7 @@ import { useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../LiveSearch";
 import { renderItem, results } from "../admin/MovieForm";
+import { useNotification } from "../../hooks";
 
 // const cast = [{ actor: id, roleAs: "", leadActor: true }];
 const defaultCastInfo = {
@@ -12,6 +13,7 @@ const defaultCastInfo = {
 
 function CastForm() {
   const [castInfo, setCastInfo] = useState({ ...defaultCastInfo });
+  const { updateNotification } = useNotification();
 
   const handleOnChange = ({ target }) => {
     const { checked, name, value } = target;
@@ -27,7 +29,14 @@ function CastForm() {
   };
 
   const handleSubmit = () => {
-    console.log(castInfo);
+    const { profile, roleAs } = castInfo;
+    if (!profile.name)
+      return updateNotification("error", "Cast profile is missing!");
+    if (!roleAs.trim())
+      return updateNotification("error", "Cast role is missing!");
+
+    onsubmit(castInfo);
+    setCastInfo({ ...defaultCastInfo });
   };
 
   const { leadActor, profile, roleAs } = castInfo;
@@ -36,9 +45,10 @@ function CastForm() {
       <input
         type="checkbox"
         name="leadActor"
-        className="w-4 h-4"
+        className="w-4 h-4 cursor-pointer"
         checked={leadActor}
         onChange={handleOnChange}
+        title="Set as lead actor"
       />
       <LiveSearch
         placeholder="Search profile"
