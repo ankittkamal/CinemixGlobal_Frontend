@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { useNotification } from "../../hooks";
+import {
+  languageOptions,
+  statusOptions,
+  typeOptions,
+} from "../../utils/options";
 import { commonInputClasses } from "../../utils/theme";
 import CastForm from "../form/CastForm";
 import Submit from "../form/Submit";
+import GenresSelector from "../GenresSelector";
 import LiveSearch from "../LiveSearch";
 import CastModal from "../models/CastModal";
+import GenresModal from "../models/GenresModal";
 import ModalContainer from "../models/ModalContainer";
 import WritersModal from "../models/WritersModal";
 import PosterSelector from "../PosterSelector";
+import Selector from "../Selector";
 import TagsInput from "../TagsInput";
 
 export const results = [
@@ -77,6 +85,8 @@ export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
+  const [selectedPosterForUI, setSelectedPosterForUI] = useState("");
+  const [showGenresModal, setShowGenresModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -85,8 +95,18 @@ export default function MovieForm() {
     console.log(movieInfo);
   };
 
+  const updatePosterForUI = (file) => {
+    const url = URL.createObjectURL(file);
+    setSelectedPosterForUI(url);
+  };
+
   const handleChange = ({ target }) => {
-    const { value, name } = target;
+    const { value, name, files } = target;
+    if (name === "poster") {
+      const poster = files[0];
+      updatePosterForUI(poster);
+      return setMovieInfo({ ...movieInfo, poster });
+    }
 
     setMovieInfo({ ...movieInfo, [name]: value });
   };
@@ -102,6 +122,10 @@ export default function MovieForm() {
   const updateCast = (castInfo) => {
     const { cast } = movieInfo;
     setMovieInfo({ ...movieInfo, cast: [...cast, castInfo] });
+  };
+
+  const updateGenres = (genres) => {
+    setMovieInfo({ ...movieInfo, genres });
   };
 
   const updateWriters = (profile) => {
@@ -133,6 +157,14 @@ export default function MovieForm() {
     setShowCastModal(true);
   };
 
+  const hideGenresModal = () => {
+    setShowGenresModal(false);
+  };
+
+  const displayGenresModal = () => {
+    setShowGenresModal(true);
+  };
+
   const handleWriterRemove = (profileId) => {
     const { writers } = movieInfo;
     const newWriters = writers.filter(({ id }) => id !== profileId);
@@ -147,8 +179,19 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
-  const { title, storyLine, director, writers, cast, tags, releseDate } =
-    movieInfo;
+  const {
+    title,
+    storyLine,
+    director,
+    writers,
+    cast,
+    tags,
+    releseDate,
+    genres,
+    type,
+    language,
+    status,
+  } = movieInfo;
 
   return (
     <>
@@ -216,7 +259,6 @@ export default function MovieForm() {
               placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateWriters}
-              value={director.name}
             />
           </div>
 
@@ -242,8 +284,36 @@ export default function MovieForm() {
 
           <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
-        <div className="w-[30%]">
-          <PosterSelector />
+        <div className="w-[30%] space-y-5">
+          <PosterSelector
+            name="poster"
+            onChange={handleChange}
+            selectedPoster={selectedPosterForUI}
+            accept="image/jpg, image/jpeg, image/png"
+          />
+          <GenresSelector badge={genres.length} onClick={displayGenresModal} />
+
+          <Selector
+            onChange={handleChange}
+            name="type"
+            value={type}
+            options={typeOptions}
+            label="Type"
+          />
+          <Selector
+            onChange={handleChange}
+            name="language"
+            value={language}
+            options={languageOptions}
+            label="Language"
+          />
+          <Selector
+            onChange={handleChange}
+            name="status"
+            value={status}
+            options={statusOptions}
+            label="Status"
+          />
         </div>
       </div>
 
@@ -259,6 +329,12 @@ export default function MovieForm() {
         casts={cast}
         visible={showCastModal}
         onRemoveClick={handleCastRemove}
+      />
+      <GenresModal
+        onSubmit={updateGenres}
+        visible={showGenresModal}
+        onClose={hideGenresModal}
+        previousSelection={genres}
       />
     </>
   );
