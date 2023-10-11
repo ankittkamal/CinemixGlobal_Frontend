@@ -12,7 +12,6 @@ import GenresSelector from "../GenresSelector";
 import LiveSearch from "../LiveSearch";
 import CastModal from "../models/CastModal";
 import GenresModal from "../models/GenresModal";
-import ModalContainer from "../models/ModalContainer";
 import WritersModal from "../models/WritersModal";
 import PosterSelector from "../PosterSelector";
 import Selector from "../Selector";
