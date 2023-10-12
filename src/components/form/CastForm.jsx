@@ -1,19 +1,22 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../LiveSearch";
-import { renderItem, results } from "../admin/MovieForm";
-import { useNotification } from "../../hooks";
-
+import { results } from "../admin/MovieForm";
+import { useNotification, useSearch } from "../../hooks";
+import { renderItem } from "../../utils/helper";
+import { searchActor } from "../../api/actor";
 // const cast = [{ actor: id, roleAs: "", leadActor: true }];
 const defaultCastInfo = {
   profile: {},
   roleAs: "",
   leadActor: false,
 };
-
-function CastForm() {
+export default function CastForm({ onSubmit }) {
   const [castInfo, setCastInfo] = useState({ ...defaultCastInfo });
+  const [profiles, setProfiles] = useState([]);
+
   const { updateNotification } = useNotification();
+  const { handleSearch, resetSearch } = useSearch();
 
   const handleOnChange = ({ target }) => {
     const { checked, name, value } = target;
@@ -35,8 +38,17 @@ function CastForm() {
     if (!roleAs.trim())
       return updateNotification("error", "Cast role is missing!");
 
-    onsubmit(castInfo);
-    setCastInfo({ ...defaultCastInfo });
+    onSubmit(castInfo);
+    setCastInfo({ ...defaultCastInfo, profile: { name: "" } });
+    resetSearch();
+  };
+
+  const handleProfileChange = ({ target }) => {
+    const { value } = target;
+    const { profile } = castInfo;
+    profile.name = value;
+    setCastInfo({ ...castInfo, ...profile });
+    handleSearch(searchActor, value, setProfiles);
   };
 
   const { leadActor, profile, roleAs } = castInfo;
@@ -45,7 +57,7 @@ function CastForm() {
       <input
         type="checkbox"
         name="leadActor"
-        className="w-4 h-4 cursor-pointer"
+        className="w-4 h-4"
         checked={leadActor}
         onChange={handleOnChange}
         title="Set as lead actor"
@@ -53,9 +65,10 @@ function CastForm() {
       <LiveSearch
         placeholder="Search profile"
         value={profile.name}
-        results={results}
+        results={profiles}
         onSelect={handleProfileSelect}
         renderItem={renderItem}
+        onChange={handleProfileChange}
       />
       <span className="dark:text-dark-subtle text-light-subtle font-semibold">
         as
@@ -81,5 +94,3 @@ function CastForm() {
     </div>
   );
 }
-
-export default CastForm;
