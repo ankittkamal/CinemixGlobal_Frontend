@@ -1,9 +1,10 @@
+import React from "react";
 import AuthProvider from "./AuthProvider";
 import NotificationProvider from "./NotificationProvider";
 import SearchProvider from "./SearchProvider";
 import ThemeProvider from "./ThemeProvider";
 
-function ContextProviders({ children }) {
+export default function ContextProviders({ children }) {
   return (
     <NotificationProvider>
       <SearchProvider>
@@ -14,5 +15,3 @@ function ContextProviders({ children }) {
     </NotificationProvider>
   );
 }
-
-export default ContextProviders;

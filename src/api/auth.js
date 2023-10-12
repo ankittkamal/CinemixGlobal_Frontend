@@ -7,6 +7,7 @@ export const createUser = async (userInfo) => {
   } catch (error) {
     const { response } = error;
     if (response?.data) return response.data;
+
     return { error: error.message || error };
   }
 };
@@ -16,9 +17,9 @@ export const verifyUserEmail = async (userInfo) => {
     const { data } = await client.post("/user/verify-email", userInfo);
     return data;
   } catch (error) {
-    //  console.log(error.response?.data);
     const { response } = error;
     if (response?.data) return response.data;
+
     return { error: error.message || error };
   }
 };
@@ -34,6 +35,7 @@ export const signInUser = async (userInfo) => {
     return { error: error.message || error };
   }
 };
+
 export const getIsAuth = async (token) => {
   try {
     const { data } = await client.get("/user/is-auth", {
@@ -62,6 +64,7 @@ export const forgetPassword = async (email) => {
     return { error: error.message || error };
   }
 };
+
 export const verifyPasswordResetToken = async (token, userId) => {
   try {
     const { data } = await client.post("/user/verify-pass-reset-token", {

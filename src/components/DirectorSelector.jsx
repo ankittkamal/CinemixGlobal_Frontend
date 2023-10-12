@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { searchActor } from "../api/actor";
 import { useSearch } from "../hooks";
+import { renderItem } from "../utils/helper";
 import Label from "./Label.jsx";
 import LiveSearch from "./LiveSearch";
-import { renderItem } from "../utils/helper";
 
 export default function DirectorSelector({ onSelect }) {
   const [value, setValue] = useState("");

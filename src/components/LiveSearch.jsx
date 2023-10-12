@@ -39,6 +39,7 @@ export default function LiveSearch({
 
   const handleKeyDown = ({ key }) => {
     let nextCount;
+
     const keys = ["ArrowDown", "ArrowUp", "Enter", "Escape"];
     if (!keys.includes(key)) return;
 

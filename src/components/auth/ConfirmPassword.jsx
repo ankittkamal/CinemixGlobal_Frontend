@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { commanModalClasses } from "../../utils/theme";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ImSpinner3 } from "react-icons/im";
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { ImSpinner3 } from "react-icons/im";
 import { resetPassword, verifyPasswordResetToken } from "../../api/auth";
 import { useNotification } from "../../hooks";
 
-function ConfirmPassword() {
+export default function ConfirmPassword() {
   const [password, setPassword] = useState({
     one: "",
     two: "",
   });
-  const [isVerifying, setIsVerifying] = useState(true);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -24,8 +24,7 @@ function ConfirmPassword() {
   const { updateNotification } = useNotification();
   const navigate = useNavigate();
 
-  // isValid, isVerifying, !isValid
-
+  // isValid, !isValid
   useEffect(() => {
     isValidToken();
   }, []);
@@ -50,6 +49,7 @@ function ConfirmPassword() {
     const { name, value } = target;
     setPassword({ ...password, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,10 +79,10 @@ function ConfirmPassword() {
       <FormContainer>
         <Container>
           <div className="flex space-x-2 items-center">
-            <h1 className=" text-4xl font-semibold dark:bg-gray-200 bg-black text-gray-300  dark:text-primary p-2 rounded-xl opacity-75 ">
+            <h1 className="text-4xl font-semibold dark:text-white text-primary">
               Please wait we are verifying your token!
             </h1>
-            <ImSpinner3 className="animate-spin text-4xl  text-gray-700  dark:text-white" />
+            <ImSpinner3 className="animate-spin text-4xl dark:text-white text-primary" />
           </div>
         </Container>
       </FormContainer>
@@ -102,13 +102,13 @@ function ConfirmPassword() {
   return (
     <FormContainer>
       <Container>
-        <form onSubmit={handleSubmit} className={commanModalClasses + " w-96"}>
-          <Title>Please Enter New Password</Title>
+        <form onSubmit={handleSubmit} className={commonModalClasses + " w-96"}>
+          <Title>Enter New Password</Title>
           <FormInput
             value={password.one}
             onChange={handleChange}
             label="New Password"
-            placeholder="*********"
+            placeholder="********"
             name="one"
             type="password"
           />
@@ -116,15 +116,13 @@ function ConfirmPassword() {
             value={password.two}
             onChange={handleChange}
             label="Confirm Password"
-            placeholder="*********"
+            placeholder="********"
             name="two"
             type="password"
           />
-          <Submit value="Send Link" />
+          <Submit value="Confirm Password" />
         </form>
       </Container>
     </FormContainer>
   );
 }
-
-export default ConfirmPassword;

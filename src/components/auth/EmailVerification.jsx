@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import Container from "../Container";
-
-import Submit from "../form/Submit";
-import Title from "../form/Title";
-import FormContainer from "../form/FormContainer";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { commanModalClasses } from "../../utils/theme";
 import { resendEmailVerificationToken, verifyUserEmail } from "../../api/auth";
 import { useAuth, useNotification } from "../../hooks";
+import { commonModalClasses } from "../../utils/theme";
+import Container from "../Container";
+import FormContainer from "../form/FormContainer";
+import Submit from "../form/Submit";
+import Title from "../form/Title";
 
 const OTP_LENGTH = 6;
 let currentOTPIndex;
@@ -23,7 +22,7 @@ const isValidOTP = (otp) => {
   return valid;
 };
 
-function EmailVerification() {
+export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(""));
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
 
@@ -107,18 +106,19 @@ function EmailVerification() {
     if (isLoggedIn && isVerified) navigate("/");
   }, [user, isLoggedIn, isVerified]);
 
-  // if (!user) return null;
+  // if(!user) return null
 
   return (
     <FormContainer>
       <Container>
-        <form onSubmit={handleSubmit} className={commanModalClasses}>
+        <form onSubmit={handleSubmit} className={commonModalClasses}>
           <div>
-            <Title>Please Enter The OTP to verify your account</Title>
-            <p className="dark:text-dark-subtle text-light-subtle text-center ">
-              OTP has been send to your email
+            <Title>Please enter the OTP to verify your account</Title>
+            <p className="text-center dark:text-dark-subtle text-light-subtle">
+              OTP has been sent to your email
             </p>
           </div>
+
           <div className="flex justify-center items-center space-x-4">
             {otp.map((_, index) => {
               return (
@@ -129,17 +129,17 @@ function EmailVerification() {
                   value={otp[index] || ""}
                   onChange={handleOtpChange}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-12 h-12 border-2 rounded-lg dark:border-dark-subtle border-light-subtle focus:border-primary dark:focus:border-white bg-transparent outline-none dark:text-white font-semibold text-center text-xl spin-button-none"
+                  className="w-12 h-12 border-2 dark:border-dark-subtle  border-light-subtle darK:focus:border-white focus:border-primary rounded bg-transparent outline-none text-center dark:text-white text-primary font-semibold text-xl spin-button-none"
                 />
               );
             })}
           </div>
-          <div className="">
+          <div>
             <Submit value="Verify Account" />
             <button
               onClick={handleOTPResend}
               type="button"
-              className="dark:text-white text-blue-500 cursor-pointer font-semibold hover:underline mt-2"
+              className="dark:text-white text-blue-500 font-semibold hover:underline mt-2"
             >
               I don't have OTP
             </button>
@@ -149,5 +149,3 @@ function EmailVerification() {
     </FormContainer>
   );
 }
-
-export default EmailVerification;

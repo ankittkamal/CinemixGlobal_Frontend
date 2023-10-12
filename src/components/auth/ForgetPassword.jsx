@@ -1,16 +1,16 @@
 import React, { useState } from "react";
+import { forgetPassword } from "../../api/auth";
+import { useNotification } from "../../hooks";
+import { isValidEmail } from "../../utils/helper";
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
+import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
-import FormContainer from "../form/FormContainer";
-import { commanModalClasses } from "../../utils/theme";
-import { forgetPassword } from "../../api/auth";
-import { isValidEmail } from "../../utils/helper";
-import { useNotification } from "../../hooks";
 
-function ForgetPassword() {
+export default function ForgetPassword() {
   const [email, setEmail] = useState("");
   const { updateNotification } = useNotification();
 
@@ -27,19 +27,19 @@ function ForgetPassword() {
     const { error, message } = await forgetPassword(email);
     if (error) return updateNotification("error", error);
 
-    updateNotification("success", message);
+    updateNotification("error", message);
   };
 
   return (
     <FormContainer>
       <Container>
-        <form onSubmit={handleSubmit} className={commanModalClasses + " w-96 "}>
+        <form onSubmit={handleSubmit} className={commonModalClasses + " w-96"}>
           <Title>Please Enter Your Email</Title>
           <FormInput
             onChange={handleChange}
             value={email}
             label="Email"
-            placeholder="example@email.com"
+            placeholder="john@email.com"
             name="email"
           />
           <Submit value="Send Link" />
@@ -53,4 +53,3 @@ function ForgetPassword() {
     </FormContainer>
   );
 }
-export default ForgetPassword;

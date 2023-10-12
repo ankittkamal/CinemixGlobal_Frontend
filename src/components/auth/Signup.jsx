@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Container from "../Container";
-import Title from "../form/Title";
-import FormInput from "../form/FormInput";
-import Submit from "../form/Submit";
-import CustomLink from "../CustomLink";
-import FormContainer from "../form/FormContainer";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/auth";
-import { commanModalClasses } from "../../utils/theme";
 import { useAuth, useNotification } from "../../hooks";
 import { isValidEmail } from "../../utils/helper";
+import { commonModalClasses } from "../../utils/theme";
+import Container from "../Container";
+import CustomLink from "../CustomLink";
+import FormContainer from "../form/FormContainer";
+import FormInput from "../form/FormInput";
+import Submit from "../form/Submit";
+import Title from "../form/Title";
 
 const validateUserInfo = ({ name, email, password }) => {
   const isValidName = /^[a-z A-Z]+$/;
@@ -35,66 +35,69 @@ export default function Signup() {
   });
 
   const navigate = useNavigate();
-
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
+
   const { updateNotification } = useNotification();
 
   const handleChange = ({ target }) => {
-    const { value, name } = target;
+    const { name, value } = target;
     setUserInfo({ ...userInfo, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { ok, error } = validateUserInfo(userInfo);
+
     if (!ok) return updateNotification("error", error);
 
     const response = await createUser(userInfo);
     if (response.error) return console.log(response.error);
+
     navigate("/auth/verification", {
       state: { user: response.user },
       replace: true,
     });
   };
 
-  const { name, email, password } = userInfo;
-
   useEffect(() => {
+    // we want to move our user to somewhere else
     if (isLoggedIn) navigate("/");
   }, [isLoggedIn]);
+
+  const { name, email, password } = userInfo;
 
   return (
     <FormContainer>
       <Container>
-        <form onSubmit={handleSubmit} className={commanModalClasses + " w-72"}>
+        <form onSubmit={handleSubmit} className={commonModalClasses + " w-72"}>
           <Title>Sign up</Title>
           <FormInput
             value={name}
             onChange={handleChange}
-            name="name"
             label="Name"
-            placeholder="Satoru Gojo"
+            placeholder="John Doe"
+            name="name"
           />
           <FormInput
             value={email}
             onChange={handleChange}
-            name="email"
             label="Email"
-            placeholder="example@email.com"
+            placeholder="john@email.com"
+            name="email"
           />
           <FormInput
             value={password}
             onChange={handleChange}
+            label="Password"
+            placeholder="********"
             name="password"
-            label="password"
-            placeholder="**********"
             type="password"
           />
           <Submit value="Sign up" />
+
           <div className="flex justify-between">
-            <CustomLink to="/auth/forget-password">Forget Password</CustomLink>
+            <CustomLink to="/auth/forget-password">Forget password</CustomLink>
             <CustomLink to="/auth/signin">Sign in</CustomLink>
           </div>
         </form>

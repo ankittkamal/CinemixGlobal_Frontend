@@ -1,30 +1,27 @@
 import React from "react";
 import { BsFillSunFill } from "react-icons/bs";
-import Container from "../Container";
 import { Link } from "react-router-dom";
 import { useAuth, useTheme } from "../../hooks";
+import Container from "../Container";
 
-function Navbar() {
+export default function Navbar() {
   const { toggleTheme } = useTheme();
   const { authInfo, handleLogout } = useAuth();
   const { isLoggedIn } = authInfo;
+
   return (
     <div className="bg-secondary shadow-sm shadow-gray-500">
       <Container className="p-2">
         <div className="flex justify-between items-center">
-          <Link to="./">
-            <img
-              src="./logo.png"
-              alt="movie-review-app-logo"
-              className="h-10"
-            ></img>
+          <Link to="/">
+            <img src="./logo.png" alt="" className="h-10" />
           </Link>
 
           <ul className="flex items-center space-x-4">
             <li>
               <button
                 onClick={toggleTheme}
-                className="rounded  bg-dark-subtle dark:bg-white p-1"
+                className="dark:bg-white bg-dark-subtle p-1 rounded"
               >
                 <BsFillSunFill className="text-secondary" size={24} />
               </button>
@@ -32,9 +29,9 @@ function Navbar() {
             <li>
               <input
                 type="text"
-                className="border-2 border-dark-subtle p-1 bg-transparent text-xl outline-none focus:border-white transition text-white rounded-xl"
+                className="border-2 border-dark-subtle p-1 rounded bg-transparent text-xl outline-none focus:border-white transition text-white"
                 placeholder="search..."
-              ></input>
+              />
             </li>
             <li>
               {isLoggedIn ? (
@@ -59,5 +56,3 @@ function Navbar() {
     </div>
   );
 }
-
-export default Navbar;

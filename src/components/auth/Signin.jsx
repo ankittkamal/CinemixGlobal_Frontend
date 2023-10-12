@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth, useNotification } from "../../hooks";
+import { isValidEmail } from "../../utils/helper";
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
-import Title from "../form/Title";
-import FormInput from "../form/FormInput";
-import Submit from "../form/Submit";
 import CustomLink from "../CustomLink";
 import FormContainer from "../form/FormContainer";
-import { commanModalClasses } from "../../utils/theme";
-import { useAuth, useNotification } from "../../hooks";
-import { useNavigate } from "react-router-dom";
-import { isValidEmail } from "../../utils/helper";
+import FormInput from "../form/FormInput";
+import Submit from "../form/Submit";
+import Title from "../form/Title";
 
 const validateUserInfo = ({ email, password }) => {
   if (!email.trim()) return { ok: false, error: "Email is missing!" };
@@ -21,11 +21,12 @@ const validateUserInfo = ({ email, password }) => {
   return { ok: true };
 };
 
-function Signin() {
+export default function Signin() {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
   const { updateNotification } = useNotification();
   const { handleLogin, authInfo } = useAuth();
@@ -33,7 +34,6 @@ function Signin() {
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
-    // console.log(name);
     setUserInfo({ ...userInfo, [name]: value });
   };
 
@@ -46,32 +46,34 @@ function Signin() {
   };
 
   // useEffect(() => {
+  //   // we want to move our user to somewhere else
   //   if (isLoggedIn) navigate("/");
   // }, [isLoggedIn]);
 
   return (
     <FormContainer>
       <Container>
-        <form onSubmit={handleSubmit} className={commanModalClasses + " w-72"}>
+        <form onSubmit={handleSubmit} className={commonModalClasses + " w-72"}>
           <Title>Sign in</Title>
           <FormInput
             value={userInfo.email}
             onChange={handleChange}
-            name="email"
             label="Email"
-            placeholder="example@email.com"
+            placeholder="john@email.com"
+            name="email"
           />
           <FormInput
             value={userInfo.password}
             onChange={handleChange}
-            name="password"
             label="Password"
             placeholder="********"
+            name="password"
             type="password"
           />
           <Submit value="Sign in" busy={isPending} />
+
           <div className="flex justify-between">
-            <CustomLink to="/auth/forget-password">Forget Password</CustomLink>
+            <CustomLink to="/auth/forget-password">Forget password</CustomLink>
             <CustomLink to="/auth/signup">Sign up</CustomLink>
           </div>
         </form>
@@ -79,5 +81,3 @@ function Signin() {
     </FormContainer>
   );
 }
-
-export default Signin;

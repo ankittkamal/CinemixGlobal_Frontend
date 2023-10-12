@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import Container from "../Container";
 
-function NotVerified() {
+export default function NotVerified() {
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
   const isVerified = authInfo.profile?.isVerified;
@@ -30,5 +30,3 @@ function NotVerified() {
     </Container>
   );
 }
-
-export default NotVerified;

@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const NotificationContext = createContext();
 
 let timeoutId;
-function NotificationProvider({ children }) {
+export default function NotificationProvider({ children }) {
   const [notification, setNotification] = useState("");
   const [classes, setClasses] = useState("");
 
@@ -35,7 +35,7 @@ function NotificationProvider({ children }) {
       {children}
       {notification && (
         <div className="fixed left-1/2 -translate-x-1/2 top-24 ">
-          <div className="bounce-custom shadow-md shadow-gray-400 rounded-lg">
+          <div className="bounce-custom shadow-md shadow-gray-400 rounded">
             <p className={classes + " text-white px-4 py-2 font-semibold"}>
               {notification}
             </p>
@@ -45,5 +45,3 @@ function NotificationProvider({ children }) {
     </NotificationContext.Provider>
   );
 }
-
-export default NotificationProvider;

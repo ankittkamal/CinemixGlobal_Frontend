@@ -1,5 +1,5 @@
-function Actors() {
+import React from "react";
+
+export default function Actors() {
   return <div>Actors</div>;
 }
-
-export default Actors;

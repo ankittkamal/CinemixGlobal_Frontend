@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsFillSunFill } from "react-icons/bs";
 import { useTheme } from "../../hooks";
 
-function Header({ onAddActorClick, onAddMovieClick }) {
-  const [showOption, setShowOption] = useState(false);
+export default function Header({ onAddActorClick, onAddMovieClick }) {
+  const [showOptions, setShowOptions] = useState(false);
   const { toggleTheme } = useTheme();
 
   const options = [
@@ -16,9 +16,10 @@ function Header({ onAddActorClick, onAddMovieClick }) {
     <div className="flex items-center justify-between relative">
       <input
         type="text"
-        className="border-2 dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary dark:text-white transition bg-transparent rounded-lg text-lg p-1 outline-none"
+        className="border-2 dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary dark:text-white transition bg-transparent rounded text-lg p-1 outline-none"
         placeholder="Search Movies..."
       />
+
       <div className="flex items-center space-x-3">
         <button
           onClick={toggleTheme}
@@ -26,22 +27,25 @@ function Header({ onAddActorClick, onAddMovieClick }) {
         >
           <BsFillSunFill size={24} />
         </button>
+
         <button
-          onClick={() => setShowOption(true)}
-          className="flex items-center space-x-2 border-secondary dark:border-gray-100 hover:border-primary dark:text-white hover:opacity-80 transition font-semibold border-2 rounded-xl text-lg px-3 py-1"
+          onClick={() => setShowOptions(true)}
+          className="flex items-center space-x-2 dark:border-dark-subtle border-light-subtle dark:text-dark-subtle text-light-subtle hover:opacity-80 transition font-semibold border-2 rounded text-lg px-3 py-1"
         >
           <span>Create</span>
           <AiOutlinePlus />
         </button>
+
         <CreateOptions
-          visible={showOption}
-          onClose={() => setShowOption(false)}
+          visible={showOptions}
+          onClose={() => setShowOptions(false)}
           options={options}
         />
       </div>
     </div>
   );
 }
+
 const CreateOptions = ({ options, visible, onClose }) => {
   const container = useRef();
   const containerID = "options-container";
@@ -81,7 +85,7 @@ const CreateOptions = ({ options, visible, onClose }) => {
     <div
       id={containerID}
       ref={container}
-      className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded-lg animate-scale"
+      className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
       onAnimationEnd={(e) => {
         if (e.target.classList.contains("animate-scale-reverse")) onClose();
         e.target.classList.remove("animate-scale");
@@ -108,4 +112,3 @@ const Option = ({ children, onClick }) => {
     </button>
   );
 };
-export default Header;

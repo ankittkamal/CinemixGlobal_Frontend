@@ -1,14 +1,15 @@
-import { createContext, useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 
 export const ThemeContext = createContext();
 
 const defaultTheme = "light";
 const darkTheme = "dark";
 
-function ThemeProvider({ children }) {
+export default function ThemeProvider({ children }) {
   const toggleTheme = () => {
     const oldTheme = getTheme();
     const newTheme = oldTheme === defaultTheme ? darkTheme : defaultTheme;
+
     updateTheme(newTheme, oldTheme);
   };
 
@@ -26,11 +27,10 @@ function ThemeProvider({ children }) {
 }
 
 const getTheme = () => localStorage.getItem("theme");
+
 const updateTheme = (theme, themeToRemove) => {
   if (themeToRemove) document.documentElement.classList.remove(themeToRemove);
-  document.documentElement.classList.add(theme);
 
+  document.documentElement.classList.add(theme);
   localStorage.setItem("theme", theme);
 };
-
-export default ThemeProvider;
